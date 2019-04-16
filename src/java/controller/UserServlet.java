@@ -125,11 +125,8 @@ public class UserServlet extends HttpServlet {
                 break;
             case "logon":
                 
-                
-                
+                try {
                 Part p = null;
-                
-                
                 if(request.getPart("photo_user") != null){
                     p = request.getPart("photo_user");
                     
@@ -138,6 +135,22 @@ public class UserServlet extends HttpServlet {
                     InputStream stream = p.getInputStream();
                     
                     Upload.saveFile(stream, filePath);
+                }
+                    
+                User user = new User(); 
+                user.setNom(request.getParameter("nom_user"));
+                user.setPrenom(request.getParameter("prenom_user"));
+                user.setProfile(roleEJB.find(Integer.parseInt(request.getParameter("nom_user"))));
+                user.setChanged(false);
+                user.setPhoto(p.getSubmittedFileName());
+                user.setPassword("passer");
+                user.setLogin(user.getPrenom().substring(0,1)+user.getNom());
+                
+                
+                
+                
+                
+                } catch (Exception e) {
                 }
                 break;
             default:

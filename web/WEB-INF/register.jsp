@@ -48,21 +48,7 @@
                                            placeholder="Entrer votre prénom">
 
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Login</label>
-                                    <input type="text" name="login" class="form-control" id="exampleInputEmail1"
-                                           placeholder="Enter email">
-
-
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Password</label>
-
-                                    <input type="password" name="password" class="form-control" id="pswd"
-                                           placeholder="Password">
-
-
-                                </div>
+                                
 
 
                                 <div class="form-group">
