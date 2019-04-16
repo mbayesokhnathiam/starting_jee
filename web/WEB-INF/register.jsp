@@ -27,7 +27,7 @@
                             <h3 class="box-title">Création de votre compte d'accés </h3>
                             <input type="hidden" name="action" value="inscription">
                         </div>
-                        <form id="customerform" role="form" method="post" action="/register">
+                        <form id="customerform" role="form" method="post" action="" enctype="Multipart/form-data">
                             <input type="hidden" name="action" value="logon">
 
                             <div class="box-body">

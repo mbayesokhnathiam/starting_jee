@@ -6,25 +6,32 @@
 package controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import models.Profile;
 import models.User;
 import services.ProfileFacadeLocal;
 import services.UserFacadeLocal;
+import utilitaire.Upload;
 
 /**
  *
  * @author THIAM
  */
 @WebServlet(name = "UserServlet", urlPatterns = {"/user"})
+@MultipartConfig(fileSizeThreshold = 1024*1024*2,//taille du fichier temporaire en octet sur le disque
+                maxFileSize = 1024*1024*10, //taille de tous les fichier
+                maxRequestSize = 1024*1024*50) //all files
 public class UserServlet extends HttpServlet {
 
     @EJB
@@ -93,6 +100,7 @@ public class UserServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static final String chemin ="D://Developpement/JEE/IntroJEE/web/WEB-INF/images";
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -116,7 +124,19 @@ public class UserServlet extends HttpServlet {
                 }
                 break;
             case "logon":
+                Part p = null;
                 
+                for(Part part : request.getParts()){
+                    p=part;
+                    break;
+                }
+                
+                if(p!=null){
+                    String filePath = chemin+p.getSubmittedFileName();
+                    
+                    InputStream stream = p.getInputStream();
+                    Upload.saveFile(stream, filePath);
+                }
                 break;
             default:
                 getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
