@@ -124,7 +124,7 @@ public class UserServlet extends HttpServlet {
                 }
                 break;
             case "logon":
-                
+                String path = "";
                 try {
                 Part p = null;
                 if(request.getPart("photo_user") != null){
@@ -135,23 +135,29 @@ public class UserServlet extends HttpServlet {
                     InputStream stream = p.getInputStream();
                     
                     Upload.saveFile(stream, filePath);
+                    path = p.getSubmittedFileName();
                 }
                     
                 User user = new User(); 
+                
                 user.setNom(request.getParameter("nom_user"));
                 user.setPrenom(request.getParameter("prenom_user"));
-                user.setProfile(roleEJB.find(Integer.parseInt(request.getParameter("nom_user"))));
+                Profile profile = roleEJB.find(Integer.parseInt(request.getParameter("role_user")));
+                user.setProfile(profile);
                 user.setChanged(false);
-                user.setPhoto(p.getSubmittedFileName());
+                user.setPhoto(path);
                 user.setPassword("passer");
                 user.setLogin(user.getPrenom().substring(0,1)+user.getNom());
+                userEJB.create(user);
                 
+                    System.out.println(profile.getLibelle());
                 
-                
-                
-                
-                } catch (Exception e) {
+                request.setAttribute("message", "Utilisateur enregistré avec succes!");
+                   
+                } catch (IOException | NumberFormatException | ServletException e) {
+                    request.setAttribute("message", e.getMessage());
                 }
+                 getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
                 break;
             default:
                 getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);

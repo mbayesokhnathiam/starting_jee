@@ -67,7 +67,7 @@
                                 <label>Role</label>
                                 <select class="form-control" name="role_user" required="true">
 
-                                    <option value="">Selectionner le role</option>
+                                    
 
                                     <c:forEach items="${roles}" var="r">
                                         <option value="${r.idProfile}">${r.libelle}</option>
@@ -84,6 +84,8 @@
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">ENREGISTRER</button>
                             </div>
+                            
+                            <span>${message}</span>
 
                         </form>
                     </div>

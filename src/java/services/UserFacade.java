@@ -41,5 +41,15 @@ public class UserFacade extends AbstractFacade<User> implements UserFacadeLocal 
         
         return u;
     }
+
+    @Override
+    public int getLastIdUser() {
+        try {
+            return em.createQuery("SELECT MAX(u.id) FROM User u",Integer.class).getSingleResult();
+        } catch (Exception e) {
+        }
+        
+        return 0;
+    }
     
 }

@@ -32,4 +32,6 @@ public interface UserFacadeLocal {
     
     User getUser(String login,String pass);
     
+    int getLastIdUser();
+    
 }
