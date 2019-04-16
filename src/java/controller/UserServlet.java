@@ -100,7 +100,7 @@ public class UserServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String chemin ="D://Developpement/JEE/IntroJEE/web/WEB-INF/images";
+    private static final String chemin ="D://Developpement/JEE/IntroJEE/web/WEB-INF/images/";
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -126,15 +126,14 @@ public class UserServlet extends HttpServlet {
             case "logon":
                 Part p = null;
                 
-                for(Part part : request.getParts()){
-                    p=part;
-                    break;
-                }
                 
-                if(p!=null){
-                    String filePath = chemin+p.getSubmittedFileName();
+                if(request.getPart("photo_user") != null){
+                    p = request.getPart("photo_user");
+                    
+                    String filePath = chemin + p.getSubmittedFileName();
                     
                     InputStream stream = p.getInputStream();
+                    
                     Upload.saveFile(stream, filePath);
                 }
                 break;
