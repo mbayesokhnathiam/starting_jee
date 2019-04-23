@@ -29,9 +29,9 @@ import utilitaire.Upload;
  * @author THIAM
  */
 @WebServlet(name = "UserServlet", urlPatterns = {"/user"})
-@MultipartConfig(fileSizeThreshold = 1024*1024*2,//taille du fichier temporaire en octet sur le disque
-                maxFileSize = 1024*1024*10, //taille de tous les fichier
-                maxRequestSize = 1024*1024*50) //all files
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2,//taille du fichier temporaire en octet sur le disque
+        maxFileSize = 1024 * 1024 * 10, //taille de tous les fichier
+        maxRequestSize = 1024 * 1024 * 50) //all files
 public class UserServlet extends HttpServlet {
 
     @EJB
@@ -86,6 +86,13 @@ public class UserServlet extends HttpServlet {
                 request.setAttribute("roles", roles);
                 getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
                 break;
+            case "users":
+                List<User> users = userEJB.findAll();
+                request.setAttribute("users", users);
+                List<Profile> rolesedit = roleEJB.findAll();
+                request.setAttribute("roles", rolesedit);
+                getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+                break;
             default:
                 getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
         }
@@ -100,7 +107,8 @@ public class UserServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String chemin ="D://Developpement/JEE/IntroJEE/web/WEB-INF/images/";
+    private static final String chemin = "D://Developpement/JEE/IntroJEE/web/WEB-INF/images/";
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -126,41 +134,64 @@ public class UserServlet extends HttpServlet {
             case "logon":
                 String path = "";
                 try {
-                Part p = null;
-                if(request.getPart("photo_user") != null){
-                    p = request.getPart("photo_user");
-                    
-                    String filePath = chemin + p.getSubmittedFileName();
-                    
-                    InputStream stream = p.getInputStream();
-                    
-                    Upload.saveFile(stream, filePath);
-                    path = p.getSubmittedFileName();
-                }
-                    
-                User user = new User(); 
-                
-                user.setNom(request.getParameter("nom_user"));
-                user.setPrenom(request.getParameter("prenom_user"));
-                Profile profile = roleEJB.find(Integer.parseInt(request.getParameter("role_user")));
-                user.setProfile(profile);
-                user.setChanged(false);
-                user.setPhoto(path);
-                user.setPassword("passer");
-                user.setLogin(user.getPrenom().substring(0,1)+user.getNom());
-                userEJB.create(user);
-                
-                    System.out.println(profile.getLibelle());
-                
-                request.setAttribute("message", "Utilisateur enregistré avec succes!");
-                   
+                    Part p = null;
+                    if (request.getPart("photo_user") != null) {
+                        p = request.getPart("photo_user");
+
+                        String filePath = chemin + p.getSubmittedFileName();
+
+                        InputStream stream = p.getInputStream();
+
+                        Upload.saveFile(stream, filePath);
+                        path = p.getSubmittedFileName();
+                    }
+
+                    User user = new User();
+
+                    user.setNom(request.getParameter("nom_user"));
+                    user.setPrenom(request.getParameter("prenom_user"));
+                    Profile profile = roleEJB.find(Integer.parseInt(request.getParameter("role_user")));
+                    user.setProfile(profile);
+                    user.setChanged(false);
+                    user.setPhoto(path);
+                    user.setPassword("passer");
+                    user.setLogin(user.getPrenom().substring(0, 1) + user.getNom());
+                    userEJB.create(user);
+
+                    request.setAttribute("message", "Utilisateur enregistré avec succes!");
+
                 } catch (IOException | NumberFormatException | ServletException e) {
                     request.setAttribute("message", e.getMessage());
                 }
-                 getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
                 break;
+            case "edit":
+                System.out.println("edition");
+                try {
+                    User user = userEJB.find(Integer.parseInt(request.getParameter("id")));
+                    user.setNom(request.getParameter("nom"));
+                    user.setPrenom(request.getParameter("prenom"));
+                    Profile profile = roleEJB.find(Integer.parseInt(request.getParameter("role_user")));
+                    user.setProfile(profile);
+
+                    user.setLogin(user.getPrenom().substring(0, 1) + user.getNom());
+                    // userEJB.edit(user);
+                    System.out.println(user.toString());
+                    request.setAttribute("message", "Utilisateur enregistré avec succes!");
+
+                } catch (NumberFormatException e) {
+                    request.setAttribute("message", e.getMessage());
+                }
+                getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+                break;
+
+            case "delete":
+
+                break;
+
             default:
                 getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+                
         }
     }
 

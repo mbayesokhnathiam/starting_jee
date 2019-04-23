@@ -8,9 +8,9 @@
             <file>file:/D:/Developpement/JEE/IntroJEE/web/WEB-INF/register.jsp</file>
             <file>file:/D:/Developpement/JEE/IntroJEE/src/java/utilitaire/Upload.java</file>
             <file>file:/D:/Developpement/JEE/IntroJEE/web/WEB-INF/index.jsp</file>
+            <file>file:/D:/Developpement/JEE/IntroJEE/web/WEB-INF/glassfish-resources.xml</file>
             <file>file:/D:/Developpement/JEE/IntroJEE/src/conf/persistence.xml</file>
             <file>file:/D:/Developpement/JEE/IntroJEE/src/java/controller/UserServlet.java</file>
-            <file>file:/D:/Developpement/JEE/IntroJEE/src/java/services/ProfileFacade.java</file>
             <file>file:/D:/Developpement/JEE/IntroJEE/src/java/services/UserFacade.java</file>
             <file>file:/D:/Developpement/JEE/IntroJEE/src/java/services/UserFacadeLocal.java</file>
         </group>
