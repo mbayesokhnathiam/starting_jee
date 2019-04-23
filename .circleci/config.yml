@@ -1,38 +1,29 @@
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/openjdk:11.0.1-jdk
+# Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 
-    working_directory: ~/repo
-    
-    steps:
-      # git pull
-      - checkout
+version: 2.1
 
-      # setup testing env
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Login to DockerHub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
-          name: Decrpyt Secrets
-          command: openssl enc -d -aes-256-ecb -md md5 -in src/main/resources/application-prod.properties.secrets -out src/main/resources/application-prod.properties -k $SECRETS_KEY
-            
-      # Download and cache dependencies
-      - run: mvn dependency:go-offline
 
-      - save_cache:
-          paths:
-            - ~/.m2
-        
-      # package into a jar
-      - run: mvn clean package
 
-      # build and push docker image to docker hub
-      - run: mvn clean compile jib:build -Dimage=zarinlo/springboot-api:$CIRCLE_BUILD_NUM
+# Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
 
-      # store raw contents of src code
-      - store_artifacts:
+orbs:
 
+  # Declare a dependency on the welcome-orb
+
+  welcome: circleci/welcome-orb@0.3.1
+
+
+
+# Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
+
+workflows:
+
+  # Name the workflow "Welcome"
+
+  Welcome:
+
+    # Run the welcome/run job in its own container
+
+    jobs:
+
+      - welcome/run
